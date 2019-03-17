@@ -44,7 +44,8 @@ class pascalVOCLoader(data.Dataset):
     def __init__(
         self,
         root,
-        sbd_path='/Users/zhixingzhang/data/datasets/VOC/benchmark_RELEASE/',
+        sbd_path='/root/data/datasets/VOC/benchmark_RELEASE/',
+        # sbd_path='/Users/zhixingzhang/data/datasets/VOC/benchmark_RELEASE/',
         split="train_aug",
         is_transform=False,
         img_size=512,

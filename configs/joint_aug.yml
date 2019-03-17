@@ -6,8 +6,10 @@ data:
     val_split: val
     img_rows: 'same'
     img_cols: 'same'
-    path: /Users/zhixingzhang/Downloads/VOCdevkit/VOC2012/
-    sbd_path: '/Users/zhixingzhang/data/datasets/VOC/benchmark_RELEASE/'
+    # path: /Users/zhixingzhang/Downloads/VOCdevkit/VOC2012/
+    path: /home/zhangzhixing/VOCdevkit/VOC2012/
+    sbd_path: '/root/data/datasets/VOC/benchmark_RELEASE/'
+    # sbd_path: '/Users/zhixingzhang/data/datasets/VOC/benchmark_RELEASE/'
 training:
     train_iters: 300000
     batch_size: 16

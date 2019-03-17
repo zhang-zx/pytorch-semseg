@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+runs/
 # Torch Models
 *.pkl
 *.pth

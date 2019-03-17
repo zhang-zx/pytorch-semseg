@@ -1,10 +1,17 @@
 import math
 import numbers
 import random
+
 import numpy as np
 import torchvision.transforms.functional as tf
-
 from PIL import Image, ImageOps
+from skimage.filters import gaussian
+
+from imgaug import augmenters as iaa
+import imgaug as ia
+import imageio
+
+ia.seed(1)
 
 
 class Compose(object):
@@ -175,10 +182,10 @@ class RandomTranslate(object):
         if x_offset >= 0 and y_offset >= 0:
             padding_tuple = (0, 0, x_offset, y_offset)
 
-        elif x_offset >= 0 and y_offset < 0:
+        elif x_offset >= 0 > y_offset:
             padding_tuple = (0, abs(y_offset), x_offset, 0)
 
-        elif x_offset < 0 and y_offset >= 0:
+        elif x_offset < 0 <= y_offset:
             padding_tuple = (abs(x_offset), 0, 0, y_offset)
 
         elif x_offset < 0 and y_offset < 0:
@@ -295,3 +302,64 @@ class RandomSized(object):
         img, mask = (img.resize((w, h), Image.BILINEAR), mask.resize((w, h), Image.NEAREST))
 
         return self.crop(*self.scale(img, mask))
+
+
+class RandomGaussianBlur(object):
+    def __init__(self, sigma):
+        self.sigma = sigma
+
+    def __call__(self, img, mask):
+        self.sigma = 0.15 + random.random() * 1.15 * self.sigma
+        blurred_img = gaussian(np.array(img), sigma=self.sigma, multichannel=True)
+        blurred_img *= 255
+        return Image.fromarray(blurred_img.astype(np.uint8)), mask
+
+
+class FlipChannels(object):
+    def __init__(self, p):
+        self.p = p
+
+    def __call__(self, img, mask):
+        random_flip = random.random()
+        if random_flip >= self.p:
+            img = np.array(img)[:, :, ::-1]
+        else:
+            img = np.array(img)
+        return Image.fromarray(img.astype(np.uint8)), mask
+
+
+class JointAugmentation(object):
+    def __init__(self, p=0.5):
+        sometimes = lambda aug: iaa.Sometimes(p, aug)
+        self.joint_seq = iaa.Sequential([
+            iaa.SomeOf((0, 2), [
+                sometimes(iaa.OneOf([
+                    iaa.EdgeDetect(alpha=(0, 0.7)),
+                    iaa.DirectedEdgeDetect(
+                        alpha=(0, 0.7), direction=(0.0, 1.0)
+                    ),
+                ])),
+                iaa.AdditiveGaussianNoise(
+                    loc=0, scale=(0.0, 0.05 * 255), per_channel=0.5
+                ),
+                iaa.OneOf([
+                    iaa.Dropout((0.01, 0.075), per_channel=0.3),
+                    iaa.CoarseDropout(
+                        (0.03, 0.05), size_percent=(0.02, 0.05),
+                        per_channel=0.2
+                    ),
+                ]),
+                iaa.Invert(0.05, per_channel=True),  # invert color channels
+                iaa.Grayscale(alpha=(0.0, 1.0)),
+            ],
+                       random_order=True),
+        ], random_order=True)
+
+    def __call__(self, img, mask):
+        img = np.array(img)
+        mask = np.array(mask)
+        mask = ia.SegmentationMapOnImage(mask, shape=mask.shape, nb_classes=21)
+
+        seq_det = self.joint_seq.to_deterministic()
+        img, mask = seq_det.augment_image(img), seq_det.augment_segmentation_maps([mask])[0]
+        return Image.fromarray(img), Image.fromarray(mask.get_arr_int())

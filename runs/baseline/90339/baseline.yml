@@ -12,7 +12,7 @@ data:
     # sbd_path: '/Users/zhixingzhang/data/datasets/VOC/benchmark_RELEASE/'
 training:
     train_iters: 300000
-    batch_size: 1
+    batch_size: 16
     val_interval: 500
     n_workers: 16
     print_interval: 50
@@ -30,12 +30,11 @@ training:
       brightness: 0.5                                #[brightness varied in 1-x to 1+x]
       saturation: 0.5                                #[saturation varied in 1-x to 1+x]
       contrast: 0.25                                  #[contrast varied in 1-x to 1+x]
-      scale: [512, 512]
-      rcrop: [256, 256]                                #[crop of size (h,w)]
+#      rcrop: [256, 256]                                #[crop of size (h,w)]
 #      translate: [dh, dw]                          #[reflective translation by (dh, dw)]
       rotate: 45                                    #[rotate -d to d degrees]
 #      scale: [255,255]                                 #[scale to size (h,w)]
-      ccrop: [256,256]                                 #[center crop of (h,w)]
+#      ccrop: [256,256]                                 #[center crop of (h,w)]
       hflip: 0.5                                     #[flip horizontally with chance p]
       vflip: 0                                     #[flip vertically with chance p]
     lr_schedule:

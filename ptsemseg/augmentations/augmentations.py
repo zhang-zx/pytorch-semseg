@@ -235,13 +235,13 @@ class Scale(object):
         if (w >= h and w == self.size) or (h >= w and h == self.size):
             return img, mask
         if w > h:
-            ow = self.size
-            oh = int(self.size * h / w)
-            return (img.resize((ow, oh), Image.BILINEAR), mask.resize((ow, oh), Image.NEAREST))
+            ow = self.size[0]
+            oh = int(self.size[1] * h / w)
+            return img.resize((ow, oh), Image.BILINEAR), mask.resize((ow, oh), Image.NEAREST)
         else:
-            oh = self.size
-            ow = int(self.size * w / h)
-            return (img.resize((ow, oh), Image.BILINEAR), mask.resize((ow, oh), Image.NEAREST))
+            oh = self.size[0]
+            ow = int(self.size[1] * w / h)
+            return img.resize((ow, oh), Image.BILINEAR), mask.resize((ow, oh), Image.NEAREST)
 
 
 class RandomSizedCrop(object):

@@ -35,7 +35,9 @@ def train(cfg, writer, logger):
 
     # Setup Augmentations
     augmentations = cfg["training"].get("augmentations", None)
+    val_a = cfg["training"].get("val_augmentations", None)
     data_aug = get_composed_augmentations(augmentations)
+    val_aug = get_composed_augmentations(val_a)
 
     # Setup Dataloader
     data_loader = get_loader(cfg["data"]["dataset"])
@@ -54,6 +56,7 @@ def train(cfg, writer, logger):
         is_transform=True,
         split=cfg["data"]["val_split"],
         img_size=(cfg["data"]["img_rows"], cfg["data"]["img_cols"]),
+        augmentations=val_aug,
     )
 
     n_classes = t_loader.n_classes

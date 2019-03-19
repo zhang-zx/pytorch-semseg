@@ -12,7 +12,7 @@ data:
 #    sbd_path: '/Users/zhixingzhang/data/datasets/VOC/benchmark_RELEASE/'
 training:
     train_iters: 300000
-    batch_size: 1
+    batch_size: 32
     val_interval: 500
     n_workers: 16
     print_interval: 50

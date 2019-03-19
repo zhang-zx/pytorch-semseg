@@ -363,3 +363,25 @@ class JointAugmentation(object):
         seq_det = self.joint_seq.to_deterministic()
         img, mask = seq_det.augment_image(img), seq_det.augment_segmentation_maps([mask])[0]
         return Image.fromarray(img), Image.fromarray(mask.get_arr_int())
+
+
+class MultiScale(object):
+    def __init__(self, p=0.5):
+        sometimes = lambda aug: iaa.Sometimes(p, aug)
+        self.transform = iaa.Sequential([
+            sometimes(iaa.Affine(
+                scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},
+                order=[0, 1],
+                cval=(0, 255),
+                mode=ia.ALL
+            ))
+        ], random_order=True)
+
+    def __call__(self, img, mask):
+        img = np.array(img)
+        mask = np.array(mask)
+        mask = ia.SegmentationMapOnImage(mask, shape=mask.shape, nb_classes=21)
+
+        seq_det = self.transform.to_deterministic()
+        img, mask = seq_det.augment_image(img), seq_det.augment_segmentation_maps([mask])[0]
+        return Image.fromarray(img), Image.fromarray(mask.get_arr_int())

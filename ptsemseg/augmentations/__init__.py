@@ -17,7 +17,8 @@ from ptsemseg.augmentations.augmentations import (
     Compose,
     FlipChannels,
     RandomGaussianBlur,
-    JointAugmentation
+    JointAugmentation,
+    MultiScale
 )
 
 logger = logging.getLogger("ptsemseg")
@@ -39,7 +40,8 @@ key2aug = {
     "ccrop": CenterCrop,
     "FlipChannels": FlipChannels,
     "RandomGaussianBlur": RandomGaussianBlur,
-    "JointAugmentation": JointAugmentation
+    "JointAugmentation": JointAugmentation,
+    "MultiScale": MultiScale,
 }
 
 

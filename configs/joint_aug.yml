@@ -43,7 +43,7 @@ training:
       hflip: 0.5                                     #[flip horizontally with chance p]
       vflip: 0                                     #[flip vertically with chance p]
     val_augmentations:
-      scale: [256, 256]
+      ccrop: [256, 256]
     lr_schedule:
       name: 'multi_step'
       milestones: [175000, 225000, 275000]

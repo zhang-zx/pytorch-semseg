@@ -11,7 +11,7 @@ data:
     sbd_path: '/root/data/datasets/VOC/benchmark_RELEASE/'
 #    sbd_path: '/Users/zhixingzhang/data/datasets/VOC/benchmark_RELEASE/'
 training:
-    train_iters: 300000
+    train_iters: 36000
     batch_size: 32
     val_interval: 500
     n_workers: 16
@@ -46,6 +46,6 @@ training:
       ccrop: [256, 256]
     lr_schedule:
       name: 'multi_step'
-      milestones: [175000, 225000, 275000]
+      milestones: [18000, 24000, 30000]
       gamma: 0.1
     resume:

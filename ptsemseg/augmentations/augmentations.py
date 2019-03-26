@@ -373,9 +373,10 @@ class MultiScale(object):
         sometimes = lambda aug: iaa.Sometimes(p, aug)
         self.transform = iaa.Sequential([
             sometimes(iaa.Affine(
-                scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},
+                scale=(0.8, 1.2),
                 order=[0, 1],
                 cval=(0, 255),
+                translate_percent=(-0.1, 0.1),
                 mode=ia.ALL
             ))
         ], random_order=True)

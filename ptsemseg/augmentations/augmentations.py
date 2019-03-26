@@ -132,6 +132,7 @@ class RandomHorizontallyFlip(object):
     def __call__(self, img, mask):
         if random.random() < self.p:
             return (img.transpose(Image.FLIP_LEFT_RIGHT), mask.transpose(Image.FLIP_LEFT_RIGHT))
+        # img.show()
         return img, mask
 
 
@@ -356,12 +357,14 @@ class JointAugmentation(object):
         ], random_order=True)
 
     def __call__(self, img, mask):
+        # img.show()
         img = np.array(img)
         mask = np.array(mask)
         mask = ia.SegmentationMapOnImage(mask, shape=mask.shape, nb_classes=21)
 
         seq_det = self.joint_seq.to_deterministic()
         img, mask = seq_det.augment_image(img), seq_det.augment_segmentation_maps([mask])[0]
+        # Image.fromarray(img).show()
         return Image.fromarray(img), Image.fromarray(mask.get_arr_int())
 
 
@@ -384,4 +387,5 @@ class MultiScale(object):
 
         seq_det = self.transform.to_deterministic()
         img, mask = seq_det.augment_image(img), seq_det.augment_segmentation_maps([mask])[0]
+        # Image.fromarray(img).show()
         return Image.fromarray(img), Image.fromarray(mask.get_arr_int())

@@ -1,0 +1,52 @@
+model:
+    arch: segnet
+data:
+    dataset: pascal
+    train_split: train_aug
+    val_split: val
+    img_rows: 'same'
+    img_cols: 'same'
+#    path: /Users/zhixingzhang/Downloads/VOCdevkit/VOC2012/
+    path: /home/zhangzhixing/VOCdevkit/VOC2012/
+    sbd_path: '/root/data/datasets/VOC/benchmark_RELEASE/'
+#    sbd_path: '/Users/zhixingzhang/data/datasets/VOC/benchmark_RELEASE/'
+training:
+    train_iters: 50000
+    batch_size: 32
+    val_interval: 250
+    n_workers: 16
+    print_interval: 50
+    optimizer:
+        name: 'sgd'
+        lr: 1.0e-10
+        weight_decay: 0.0005
+        momentum: 0.99
+    loss:
+        name: 'cross_entropy'
+        size_average: False
+    augmentations:
+      JointAugmentation: 0.5
+      MultiScale: 0.5
+      gamma: 1.25                                     #[gamma varied in 1 to 1+x]
+      hue: 0.25                                       #[hue varied in -x to x]
+      brightness: 0.25                                #[brightness varied in 1-x to 1+x]
+      saturation: 0.25                                #[saturation varied in 1-x to 1+x]
+      contrast: 0.125                                  #[contrast varied in 1-x to 1+x]
+      FlipChannels: 0.5
+      RandomGaussianBlur: 1
+      scale: [384, 384]
+      rcrop: [256, 256]                                #[crop of size (h,w)]
+      #      translate: [dh, dw]                          #[reflective translation by (dh, dw)]
+      rotate: 45                                    #[rotate -d to d degrees]
+      #      scale: [255,255]                                 #[scale to size (h,w)]
+      #      ccrop: [256,256]                                 #[center crop of (h,w)]
+#      hflip: 0.5                                     #[flip horizontally with chance p]
+      vflip: 0                                     #[flip vertically with chance p]
+    val_augmentations:
+      scale: [384, 384]
+      ccrop: [256, 256]
+    lr_schedule:
+      name: 'multi_step'
+      milestones: [30000, 40000, 45000]
+      gamma: 0.1
+    resume:

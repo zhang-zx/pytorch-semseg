@@ -25,18 +25,18 @@ training:
         name: 'cross_entropy'
         size_average: False
     augmentations:
+      JointAugmentation: 0.5
       gamma: 1.25                                     #[gamma varied in 1 to 1+x]
       hue: 0.25                                       #[hue varied in -x to x]
 #      brightness: 0.5                                #[brightness varied in 1-x to 1+x]
 #      saturation: 0.5                                #[saturation varied in 1-x to 1+x]
 #      contrast: 0.25                                  #[contrast varied in 1-x to 1+x]
       FlipChannels: 0.5
-#      RandomGaussianBlur: 1
       scale: [384, 384]
       rcrop: [256, 256]                                #[crop of size (h,w)]
 #      translate: [dh, dw]                          #[reflective translation by (dh, dw)]
       rotate: 45                                    #[rotate -d to d degrees]
-      hflip: 0                                   #[flip horizontally with chance p]
+#      hflip: 0.5                                     #[flip horizontally with chance p]
       vflip: 0                                     #[flip vertically with chance p]
     val_augmentations:
       scale: [384, 384]
